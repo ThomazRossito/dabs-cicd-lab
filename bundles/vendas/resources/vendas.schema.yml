@@ -1,0 +1,6 @@
+resources:
+  schemas:
+    vendas:
+      name: vendas
+      catalog_name: ${var.catalog}
+      comment: Schema do bundle vendas

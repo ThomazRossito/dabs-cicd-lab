@@ -11,8 +11,6 @@ include:
 variables:
   catalog:
     description: The catalog to use
-  schema:
-    description: The schema to use
 
 targets:
   dev:
@@ -26,7 +24,6 @@ targets:
       host: https://dbc-fc825c12-d98f.cloud.databricks.com
     variables:
       catalog: dev
-      schema: ${workspace.current_user.short_name}
   prod:
     mode: production
     workspace:
@@ -35,7 +32,6 @@ targets:
       root_path: /Workspace/Users/thomaz.rossito@hotmail.com/.bundle/${bundle.name}/${bundle.target}
     variables:
       catalog: dev
-      schema: prod
     permissions:
       - user_name: thomaz.rossito@hotmail.com
         level: CAN_MANAGE
