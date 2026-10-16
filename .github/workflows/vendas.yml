@@ -1,0 +1,78 @@
+name: vendas
+
+on:
+  pull_request:
+    branches: [main]
+    paths: ["bundles/vendas/**", ".github/workflows/vendas.yml"]
+  push:
+    branches: [main]
+    paths: ["bundles/vendas/**", ".github/workflows/vendas.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  # 1. Em todo PR: valida e mostra o plano de HML. Só recebe a credencial de HML.
+  pr-check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    environment: hml
+    env:
+      DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
+      DATABRICKS_AUTH_TYPE: oauth-m2m
+      DATABRICKS_CLIENT_ID: ${{ vars.DATABRICKS_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+    defaults:
+      run:
+        working-directory: bundles/vendas
+    steps:
+      - uses: actions/checkout@v4
+      - uses: databricks/setup-cli@main   # no time real: fixar por SHA
+        with:
+          version: 1.21.0
+      - run: databricks bundle validate -t hml
+      - run: databricks bundle plan -t hml
+
+  # 2. Depois do merge: publica em HML e roda o job como sp-hml-run.
+  deploy-hml:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: hml
+    concurrency: vendas-hml
+    env:
+      DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
+      DATABRICKS_AUTH_TYPE: oauth-m2m
+      DATABRICKS_CLIENT_ID: ${{ vars.DATABRICKS_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+    defaults:
+      run:
+        working-directory: bundles/vendas
+    steps:
+      - uses: actions/checkout@v4
+      - uses: databricks/setup-cli@main
+        with:
+          version: 1.21.0
+      - run: databricks bundle deploy -t hml --auto-approve
+      - run: databricks bundle run -t hml sample_job
+
+  # 3. Só depois de HML passar, e só com a sua aprovação: publica em PRD.
+  deploy-prod:
+    needs: deploy-hml
+    runs-on: ubuntu-latest
+    environment: prod
+    concurrency: vendas-prod
+    env:
+      DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
+      DATABRICKS_AUTH_TYPE: oauth-m2m
+      DATABRICKS_CLIENT_ID: ${{ vars.DATABRICKS_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+    defaults:
+      run:
+        working-directory: bundles/vendas
+    steps:
+      - uses: actions/checkout@v4
+      - uses: databricks/setup-cli@main
+        with:
+          version: 1.21.0
+      - run: databricks bundle plan -t prod
+      - run: databricks bundle deploy -t prod --fail-on-active-runs   # sem --auto-approve, de propósito
