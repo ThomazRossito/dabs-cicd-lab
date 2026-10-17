@@ -2,7 +2,7 @@
 
 *Por [Thomaz Antonio Rossito Neto](../README.md#autor), CI&T.*
 
-**Duração:** 20 a 25 minutos, depois da Parte 1 do deck (ou no lugar da seção "O que o lab provou").
+**Duração:** 20 a 25 minutos, depois da Parte 1 do deck (ou no lugar da seção "Laboratório", slides 36 a 42).
 **Público:** o time todo. Quem configura vai querer ver o YAML; quem só usa vai querer ver o caminho do PR até PRD.
 **Mensagem central:** em Dev, cada um na sua pasta; em HML e PRD, só o pipeline, e nada depende de uma pessoa.
 
@@ -180,7 +180,7 @@ databricks bundle plan -t prod
 | `deploy-prod` não pede aprovação | Conferir se há outro run de prod parado esperando aprovação; aprovar ou cancelar esse antes |
 | Check obrigatório preso em *Waiting for status* | Conferir se alguém recolocou `paths` no `pull_request` do workflow. Com o filtro, PRs fora do bundle não disparam o check |
 | `bundle deploy -t dev` pede login | `databricks auth login --host <host>` |
-| Sem internet ou workspace fora do ar | Usar os prints do [passo a passo](lab-passo-a-passo.md) e os slides "O que o lab provou" |
+| Sem internet ou workspace fora do ar | Seguir o [passo a passo](lab-passo-a-passo.md) e os slides da seção "Laboratório" do deck (36 a 42) |
 
 ---
 
