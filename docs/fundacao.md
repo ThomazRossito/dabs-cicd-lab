@@ -1,5 +1,7 @@
 # Fundação: o que existe fora do bundle
 
+*Por [Thomaz Antonio Rossito Neto](../README.md#autor), CI&T.*
+
 O bundle `vendas` cria e mantém só a carga de trabalho:
 
 - o job;

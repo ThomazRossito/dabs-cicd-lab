@@ -1,5 +1,7 @@
 # Roteiro da demo ao vivo
 
+*Por [Thomaz Antonio Rossito Neto](../README.md#autor), CI&T.*
+
 **Duração:** 20 a 25 minutos, depois da Parte 1 do deck (ou no lugar da seção "O que o lab provou").
 **Público:** o time todo. Quem configura vai querer ver o YAML; quem só usa vai querer ver o caminho do PR até PRD.
 **Mensagem central:** em Dev, cada um na sua pasta; em HML e PRD, só o pipeline, e nada depende de uma pessoa.
@@ -160,7 +162,7 @@ databricks bundle plan -t prod
 
 ### 9. Fechamento (2 min)
 
-**Mostrar:** o slide "Infra volta com o deploy. Dados, não." e a lista de [fundação](fundacao.md).
+**Mostrar:** o slide "A infraestrutura volta com o deploy. Os dados, não." e a lista de [fundação](fundacao.md).
 
 **Falar:**
 
