@@ -40,6 +40,12 @@ targets:
         level: CAN_VIEW
     variables:
       catalog: hml
+    resources:
+      schemas:
+        vendas:
+          grants:
+            - principal: 37aead13-2a7b-47ca-8bf1-ce616d51770c   # sp-hml-run grava as tabelas do job
+              privileges: [USE_SCHEMA, SELECT, MODIFY, CREATE_TABLE]
 
   # PRD: só o pipeline publica, depois da aprovação, e só a partir da main
   prod:
@@ -63,4 +69,9 @@ targets:
         level: CAN_VIEW
     variables:
       catalog: prod
-# teste concorrência A
+    resources:
+      schemas:
+        vendas:
+          grants:
+            - principal: d399823d-8297-423b-a91c-b9da3a33fbff   # sp-prd-run grava as tabelas do job
+              privileges: [USE_SCHEMA, SELECT, MODIFY, CREATE_TABLE]
