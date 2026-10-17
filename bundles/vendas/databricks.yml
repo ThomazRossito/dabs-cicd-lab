@@ -63,3 +63,4 @@ targets:
         level: CAN_VIEW
     variables:
       catalog: prod
+# teste concorrência A
