@@ -1,5 +1,7 @@
 # Laboratório passo a passo
 
+*Por [Thomaz Antonio Rossito Neto](../README.md#autor), CI&T.*
+
 Registro de tudo o que foi feito para montar este laboratório, na ordem em que aconteceu, entre 14 e 17 de outubro de 2026. Cada passo traz o objetivo, o que foi feito no GitHub, no Databricks e no terminal, como conferir o resultado e os erros que apareceram no caminho.
 
 **Ambiente usado:**

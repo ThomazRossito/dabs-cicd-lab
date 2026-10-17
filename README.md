@@ -25,6 +25,7 @@ Nada aqui depende de uma pessoa específica.
 - [Limitações do laboratório](#limitações-do-laboratório)
 - [Documentação](#documentação)
 - [Fontes oficiais](#fontes-oficiais)
+- [Autor](#autor)
 
 ---
 
@@ -274,3 +275,16 @@ Ao recriar com `destroy` e `deploy`, três coisas não voltam iguais:
 - [checagem de `git.branch`](https://github.com/databricks/cli/blob/v1.21.0/bundle/config/mutator/validate_git_details.go)
 - [jobs publicados com `UI_LOCKED`](https://github.com/databricks/cli/blob/v1.21.0/bundle/deploy/metadata/annotate_jobs.go)
 - [grants do bundle substituem a lista do schema](https://github.com/databricks/cli/blob/v1.21.0/bundle/direct/dresources/grants.go)
+
+---
+
+## Autor
+
+**Thomaz Antonio Rossito Neto** é Principal Data Architect & AI Strategy na CI&T, no Databricks & Microsoft Fabric Partner CoE. Tem mais de 8 anos em engenharia e arquitetura de dados e 10 certificações (Databricks 5, Azure 4 e AWS 1). Atua na América Latina e na América do Norte, em ambientes multi-cloud (Azure e AWS) com Databricks e Microsoft Fabric.
+
+Criou o [Data Agents](https://github.com/ThomazRossito/data-agents), framework open-source de orquestração multi-agente para dados corporativos, e o [SifTools](https://github.com/ThomazRossito/siftools), de engenharia de contexto para agentes com MCP. Conduz workshops e treinamentos técnicos para times da CI&T e clientes.
+
+- LinkedIn: [linkedin.com/in/thomaz-antonio-rossito-neto](https://www.linkedin.com/in/thomaz-antonio-rossito-neto/)
+- GitHub: [github.com/ThomazRossito](https://github.com/ThomazRossito)
+- Medium: [medium.com/@thomazrossito](https://medium.com/@thomazrossito)
+- YouTube: [youtube.com/@thomazantoniorossitoneto4541](https://www.youtube.com/@thomazantoniorossitoneto4541)
