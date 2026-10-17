@@ -2,8 +2,7 @@ name: vendas
 
 on:
   pull_request:
-    branches: [main]
-    paths: ["bundles/vendas/**", ".github/workflows/vendas.yml"]
+    branches: [main]   # sem paths: o pr-check é obrigatório no ruleset, então roda em todo PR
   push:
     branches: [main]
     paths: ["bundles/vendas/**", ".github/workflows/vendas.yml"]
@@ -15,7 +14,7 @@ jobs:
   # 1. Em todo PR: valida e mostra o plano de HML. Só recebe a credencial de HML.
   pr-check:
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: hml
     env:
       DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
@@ -26,8 +25,10 @@ jobs:
       run:
         working-directory: bundles/vendas
     steps:
-      - uses: actions/checkout@v4
-      - uses: databricks/setup-cli@main   # no time real: fixar por SHA
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: databricks/setup-cli@2bf4520fd10723ed5a22eca62a8c8a63714a7ba9  # v1.21.0
         with:
           version: 1.21.0
       - run: databricks bundle validate -t hml
@@ -36,7 +37,7 @@ jobs:
   # 2. Depois do merge: publica em HML e roda o job como sp-hml-run.
   deploy-hml:
     if: github.event_name == 'push'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: hml
     concurrency: vendas-hml
     env:
@@ -48,8 +49,10 @@ jobs:
       run:
         working-directory: bundles/vendas
     steps:
-      - uses: actions/checkout@v4
-      - uses: databricks/setup-cli@main
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: databricks/setup-cli@2bf4520fd10723ed5a22eca62a8c8a63714a7ba9  # v1.21.0
         with:
           version: 1.21.0
       - run: databricks bundle deploy -t hml --auto-approve
@@ -58,7 +61,7 @@ jobs:
   # 3. Só depois de HML passar, e só com a sua aprovação: publica em PRD.
   deploy-prod:
     needs: deploy-hml
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: prod
     concurrency: vendas-prod
     env:
@@ -70,8 +73,10 @@ jobs:
       run:
         working-directory: bundles/vendas
     steps:
-      - uses: actions/checkout@v4
-      - uses: databricks/setup-cli@main
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: databricks/setup-cli@2bf4520fd10723ed5a22eca62a8c8a63714a7ba9  # v1.21.0
         with:
           version: 1.21.0
       - run: databricks bundle plan -t prod
