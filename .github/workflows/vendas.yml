@@ -3,6 +3,7 @@ name: vendas
 on:
   pull_request:
     branches: [main]   # sem paths: o pr-check é obrigatório no ruleset, então roda em todo PR
+    types: [opened, synchronize, reopened, labeled, unlabeled]   # roda de novo ao pôr/tirar label
   push:
     branches: [main]
     paths: ["bundles/vendas/**", ".github/workflows/vendas.yml"]
@@ -33,6 +34,19 @@ jobs:
           version: 1.21.0
       - run: databricks bundle validate -t hml
       - run: databricks bundle plan -t hml
+      - name: Bloquear delete/recreate sem o label permite-delete
+        if: ${{ !contains(github.event.pull_request.labels.*.name, 'permite-delete') }}
+        run: |
+          set -o pipefail   # se o plan falhar, o step falha (não passa em silêncio)
+          destrutivos=$(databricks bundle plan -t hml -o json \
+            | jq -r '.plan | to_entries[]
+                     | select(.value.action == "delete" or .value.action == "recreate")
+                     | select(.value.state_only != true) | .key')
+          if [ -n "$destrutivos" ]; then
+            echo "::error::O plano apaga ou recria: $destrutivos"
+            echo "::error::Se for intencional, adicione o label 'permite-delete' ao PR."
+            exit 1
+          fi
 
   # 2. Depois do merge: publica em HML e roda o job como sp-hml-run.
   deploy-hml:
