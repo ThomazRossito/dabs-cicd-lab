@@ -31,15 +31,39 @@ Nada aqui depende de uma pessoa específica.
 ## Visão geral
 
 ```mermaid
-flowchart LR
-    dev["Você, no seu Mac<br/>bundle deploy -t dev"] -->|PR| check["pr-check<br/>validate · plan · trava de delete"]
-    check -->|merge na main| hml["deploy-hml<br/>deploy + run do job"]
-    hml -->|aprovação manual| prd["deploy-prod<br/>plan + deploy"]
+flowchart TB
+    voce(["Você, no seu Mac"])
 
-    dev -.-> wsdev["/Workspace/Users/(você)/.bundle/vendas/dev"]
-    hml -.-> wshml["/Workspace/Homologacao/.bundle/vendas"]
-    prd -.-> wsprd["/Workspace/Production/.bundle/vendas"]
+    subgraph GH[" "]
+        check["pr-check<br/>validate · plan<br/>trava de delete"]
+        hml["deploy-hml<br/>deploy + run do job"]
+        prd["deploy-prod<br/>plan + deploy"]
+        check -->|merge na main| hml
+        hml -->|aprovação manual| prd
+    end
+
+    subgraph DB[" "]
+        wsdev["Dev<br/>/Users/(você)/<br/>.bundle/vendas/dev"]
+        wshml["HML<br/>/Homologacao/<br/>.bundle/vendas"]
+        wsprd["PRD<br/>/Production/<br/>.bundle/vendas"]
+    end
+
+    voce -->|abre PR| check
+    voce -.->|deploy -t dev| wsdev
+    hml --> wshml
+    prd --> wsprd
+
+    classDef pessoa fill:#f6f8fa,stroke:#57606a,color:#24292f
+    classDef gh fill:#ddf4ff,stroke:#0969da,color:#0a3069
+    classDef db fill:#fff1e5,stroke:#bc4c00,color:#3d1d00
+    class voce pessoa
+    class check,hml,prd gh
+    class wsdev,wshml,wsprd db
+    style GH fill:transparent,stroke:#0969da,stroke-dasharray:5 5
+    style DB fill:transparent,stroke:#bc4c00,stroke-dasharray:5 5
 ```
+
+Em azul, os jobs do GitHub Actions. Em laranja, as pastas do bundle no workspace do Databricks, que no lab é um só. A linha pontilhada é o único deploy feito por uma pessoa.
 
 O bundle `vendas` tem dois recursos:
 
